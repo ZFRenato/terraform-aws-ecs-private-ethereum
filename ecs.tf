@@ -1,12 +1,13 @@
 locals {
   service_name_fmt = "node-%0${min(length(format("%d", var.number_of_nodes)), length(format("%s", var.number_of_nodes))) + 1}d-%s"
-  ecs_cluster_name = "ethereum-network-${var.network_name}"
+  ecs_cluster_name = "geth-${var.network_name}"
   ethereum_bucket  = "${var.region}-ecs-${lower(var.network_name)}-${random_id.bucket_postfix.hex}"
 }
 
 resource "aws_ecs_cluster" "ethereum" {
   name = local.ecs_cluster_name
 }
+
 
 resource "aws_ecs_task_definition" "ethstats" {
   family                   = "ethstats-${var.network_name}"
@@ -72,6 +73,7 @@ resource "aws_ecs_service" "ethereum_explorer" {
   }
 
 }
+
 resource "aws_ecs_task_definition" "go_ethereum" {
   family                   = "go-ethereum-${var.network_name}"
   container_definitions    = replace(element(compact(local.container_definitions), 0), "/\"(true|false|[0-9]+)\"/", "$1")
@@ -114,7 +116,7 @@ resource "random_id" "bucket_postfix" {
 
 data "aws_caller_identity" "this" {}
 
-data "aws_iam_policy_document" "bucket_policy" {
+data "aws_iam_policy_document" "allow_all_access_within_account" {
   statement {
     sid     = "AllowAccess"
     actions = ["s3:*"]
@@ -132,12 +134,20 @@ data "aws_iam_policy_document" "bucket_policy" {
   }
 }
 
+
 resource "aws_s3_bucket" "ethereum" {
   bucket        = local.ethereum_bucket
-  policy        = data.aws_iam_policy_document.bucket_policy.json
   force_destroy = true
+}
 
-  versioning {
-    enabled = true
+resource "aws_s3_bucket_versioning" "versioning_ethereum" {
+  bucket = aws_s3_bucket.ethereum.id
+  versioning_configuration {
+    status = "Enabled"
   }
+}
+
+resource "aws_s3_bucket_policy" "allow_all_access_within_account" {
+  bucket = aws_s3_bucket.ethereum.id
+  policy = data.aws_iam_policy_document.allow_all_access_within_account.json
 }

@@ -68,12 +68,12 @@ locals {
 
   go_ethereum_args = join(" ", [
     "--datadir ${local.data_dir}",
-    "--rpc",
-    "--rpcaddr 0.0.0.0",
-    "--rpcapi admin,eth,debug,miner,net,shh,txpool,personal,web3,clique",
-    "--rpcport ${var.go_ethereum_rpc_port}",
-    "--rpcvhosts=*",
-    "--rpccorsdomain=*",
+    "--http",
+    "--http.addr 0.0.0.0",
+    "--http.api admin,eth,debug,miner,net,shh,txpool,personal,web3,clique",
+    "--http.port ${var.go_ethereum_rpc_port}",
+    "--http.vhosts=*",
+    "--http.corsdomain=*",
     "--port ${var.go_ethereum_p2p_port}",
     "--unlock 0",
     "--password ${local.password_file}",
