@@ -64,7 +64,7 @@ variable "ethereum_explorer_port" {
 variable "go_ethereum_docker_image" {
   type        = string
   description = "The Go Ethereum docker image to run Ethereum client node"
-  default     = "ethereum/client-go:v1.10.23"
+  default     = "ethereum/client-go:alltools-v1.10.25"
 }
 
 variable "aws_cli_docker_image" {
