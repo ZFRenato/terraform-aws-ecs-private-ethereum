@@ -4,12 +4,12 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 4"
     }
-    local  = {
-      source = "hashicorp/local"
+    local = {
+      source  = "hashicorp/local"
       version = "~> 2.1"
     }
     random = {
-      source = "hashicorp/random"
+      source  = "hashicorp/random"
       version = "~> 3.1"
     }
   }
