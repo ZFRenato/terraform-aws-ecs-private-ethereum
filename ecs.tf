@@ -13,8 +13,8 @@ resource "aws_ecs_task_definition" "ethstats" {
   family                   = "ethstats-${var.network_name}"
   container_definitions    = replace(element(compact(local.ethstats_container_definitions), 0), "/\"(true|false|[0-9]+)\"/", "$1")
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "4096"
-  memory                   = "8192"
+  cpu                      = "1024"
+  memory                   = "2048"
   network_mode             = "awsvpc"
   task_role_arn            = aws_iam_role.ecs_task.arn
   execution_role_arn       = aws_iam_role.ecs_task.arn
@@ -45,8 +45,8 @@ resource "aws_ecs_task_definition" "ethereum_explorer" {
   family                   = "ethereum-explorer-${var.network_name}"
   container_definitions    = replace(element(compact(local.ethereum_explorer_container_definitions), 0), "/\"(true|false|[0-9]+)\"/", "$1")
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "4096"
-  memory                   = "8192"
+  cpu                      = "1024"
+  memory                   = "2048"
   network_mode             = "awsvpc"
   task_role_arn            = aws_iam_role.ecs_task.arn
   execution_role_arn       = aws_iam_role.ecs_task.arn
@@ -78,8 +78,8 @@ resource "aws_ecs_task_definition" "go_ethereum" {
   family                   = "go-ethereum-${var.network_name}"
   container_definitions    = replace(element(compact(local.container_definitions), 0), "/\"(true|false|[0-9]+)\"/", "$1")
   requires_compatibilities = ["FARGATE"]
-  cpu                      = "4096"
-  memory                   = "8192"
+  cpu                      = "1024"
+  memory                   = "2048"
   network_mode             = "awsvpc"
   task_role_arn            = aws_iam_role.ecs_task.arn
   execution_role_arn       = aws_iam_role.ecs_task.arn
